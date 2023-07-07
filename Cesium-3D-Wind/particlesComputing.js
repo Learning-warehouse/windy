@@ -159,6 +159,18 @@ class ParticlesComputing {
                     },
                     currentParticlesSpeed: function () {
                         return that.particlesTextures.currentParticlesSpeed;
+                    },
+                    minLon: function () {
+                        return data.lon.min;
+                    },
+                    maxLon: function () {
+                        return data.lon.max;
+                    },
+                    minLat: function () {
+                        return data.lat.min;
+                    },
+                    maxLat: function () {
+                        return data.lat.max;
                     }
                 },
                 fragmentShaderSource: new Cesium.ShaderSource({

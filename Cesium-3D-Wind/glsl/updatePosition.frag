@@ -28,24 +28,33 @@ vec2 lengthOfLonLat(vec3 lonLatLev) {
 
     return vec2(longLength, latLength);
 }
-
-void updatePosition(vec3 lonLatLev, vec3 speed) {
-    vec2 lonlatLengthgth = lengthOfLonLat(lonLatLev);
-    float u = speed.x / lonlatLengthgth.x;
-    float v = speed.y / lonlatLengthgth.y;
-    float w = 0.0;
-    vec3 windVectorInLonLatLev = vec3(u, v, w);
-
-    vec3 nextParticle = lonLatLev + windVectorInLonLatLev;
-
-    gl_FragColor = vec4(nextParticle, 0.0);
-}
 bool isInsideRectangle(vec3 lonLatLev) {
     // 判断经纬度是否在矩形内部
     bool isLonInside = lonLatLev.x >= minLon && lonLatLev.x <= maxLon;
     bool isLatInside = lonLatLev.y >= minLat && lonLatLev.y <= maxLat;
     return isLonInside && isLatInside;
 }
+void updatePosition(vec3 lonLatLev, vec3 speed) {
+    vec2 lonlatLengthgth = lengthOfLonLat(lonLatLev);
+    if(lonLatLev.x!=0.0 || lonLatLev.y!=0.0){
+        float u = speed.x / lonlatLengthgth.x;
+        float v = speed.y / lonlatLengthgth.y;
+        float w = 0.0;
+        vec3 windVectorInLonLatLev = vec3(u, v, w);
+
+        vec3 nextParticle = lonLatLev + windVectorInLonLatLev;
+        if(isInsideRectangle(nextParticle)) {
+            gl_FragColor = vec4(nextParticle, 0.0);
+        }else {
+            gl_FragColor = vec4(lonLatLev, 0.0);
+        }
+    }else{
+        gl_FragColor = vec4(lonLatLev, 0.0);
+    }
+
+
+}
+
 
 void main() {
     // texture coordinate must be normalized

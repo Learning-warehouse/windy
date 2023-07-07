@@ -98,10 +98,19 @@ vec3 bicubic(vec3 lonLatLev) {
     float w = 0.0;
     return vec3(u, v, w);
 }
-
+bool isUV(float num) {
+    return num == 0.0;
+}
 void main() {
     // texture coordinate must be normalized
     vec3 lonLatLev = texture2D(currentParticlesPosition, v_textureCoordinates).rgb;
     vec3 windVector = bicubic(lonLatLev);
-	gl_FragColor = vec4(windVector, 0.0);
+    float u = interpolateOneTexture(U, lonLatLev);
+    float v = interpolateOneTexture(V, lonLatLev);
+    if(isUV(u) || isUV(v)) {
+      discard;
+    }else{
+      gl_FragColor = vec4(windVector, 0.0);
+    }
+
 }
